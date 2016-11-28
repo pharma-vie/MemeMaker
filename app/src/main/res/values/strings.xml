@@ -2,4 +2,5 @@
     <string name="app_name">Meme Maker</string>
     <string name="sign_in_cancelled_text">Sign in cancelled.</string>
     <string name="no_internet_connection_text">No internet connection. Please try again later.</string>
+    <string name="no_memes_yet_text">You haven\'t created any memes yet!</string>
 </resources>
