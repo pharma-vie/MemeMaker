@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -26,5 +29,11 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
+    compile 'com.firebaseui:firebase-ui-auth:1.0.1'
     testCompile 'junit:junit:4.12'
 }
+
+
+
+
+apply plugin: 'com.google.gms.google-services'
