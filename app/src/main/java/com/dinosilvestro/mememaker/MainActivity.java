@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             // already signed in
             Log.i(TAG, auth.getCurrentUser().getDisplayName());
+            //FetchMemes.getMemeData("0");
         } else {
             // not signed in
             startActivityForResult(
