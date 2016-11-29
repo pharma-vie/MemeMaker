@@ -48,7 +48,8 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterVie
         }
 
         public void bindMeme(MemeParcel memes) {
-            Picasso.with(mContext).load(memes.getMemeImageUrl()).resize(250, 250).into(mMemeImageView);
+            Picasso.with(mContext).load(memes.getMemeImageUrl())
+                    .resize(250, 250).centerCrop().into(mMemeImageView);
         }
 
         @Override

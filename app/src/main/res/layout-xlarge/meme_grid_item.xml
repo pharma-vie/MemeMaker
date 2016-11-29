@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/meme_image_view"
+    android:layout_width="380dp"
+    android:layout_height="380dp"
+    android:contentDescription="@string/this_is_a_meme_content_description"
+    android:padding="16dp"/>
