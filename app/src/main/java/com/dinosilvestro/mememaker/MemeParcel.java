@@ -29,7 +29,7 @@ public class MemeParcel implements Parcelable {
     public MemeParcel() {
     }
 
-    public MemeParcel[] getmMemes() {
+    public static MemeParcel[] getMemes() {
         return mMemes;
     }
 

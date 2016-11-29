@@ -2,8 +2,10 @@ package com.dinosilvestro.mememaker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -14,6 +16,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String GET_MEMES = "GET_MEMES";
     private static final int RC_SIGN_IN = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -21,12 +24,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FloatingActionButton createActionButton = (FloatingActionButton) findViewById(R.id.create_meme_action_button);
+
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
             Log.i(TAG, auth.getCurrentUser().getDisplayName());
-            //FetchMemes.getMemeData("0");
+            FetchMemes.getMemeData("0");
+
+            createActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), MemeDisplayActivity.class);
+                    intent.putExtra(GET_MEMES, MemeParcel.getMemes());
+                    startActivity(intent);
+                }
+            });
         } else {
             // not signed in
             startActivityForResult(
