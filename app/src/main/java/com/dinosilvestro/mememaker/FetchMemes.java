@@ -19,9 +19,8 @@ public class FetchMemes {
 
     private static final String TAG = FetchMemes.class.getSimpleName();
 
-    static void getMemeData(String pageIndex) {
-        String url = "http://version1.api.memegenerator.net/Generators_Select_ByPopular?pageIndex="
-                + pageIndex + "&pageSize=12&days=7";
+    static void getMemeData() {
+        String url = "https://api.imgflip.com/get_memes";
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -49,16 +48,17 @@ public class FetchMemes {
     }
 
     private static MemeParcel[] getMemes(String jsonData) throws JSONException {
-        JSONObject memeData = new JSONObject(jsonData);
-        JSONArray result = memeData.getJSONArray("result");
-        MemeParcel[] memeParcels = new MemeParcel[result.length()];
+        JSONObject jsonResults = new JSONObject(jsonData);
+        JSONObject data = jsonResults.getJSONObject("data");
+        JSONArray memes = data.getJSONArray("memes");
+        MemeParcel[] memeParcels = new MemeParcel[memes.length()];
 
-        for (int i = 0; i < result.length(); i++) {
-            JSONObject meme = result.getJSONObject(i);
+        for (int i = 0; i < memes.length(); i++) {
+            JSONObject meme = memes.getJSONObject(i);
             MemeParcel memeParcel = new MemeParcel();
-            memeParcel.setMemeImageUrl(meme.getString("imageUrl"));
+            memeParcel.setMemeImageUrl(meme.getString("url"));
             memeParcels[i] = memeParcel;
-            Log.i(TAG, meme.getString("imageUrl"));
+            Log.i(TAG, meme.getString("url"));
         }
 
         return memeParcels;

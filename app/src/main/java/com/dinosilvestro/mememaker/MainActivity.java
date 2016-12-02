@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
-            // already signed in
+            // Already signed in
             Log.i(TAG, auth.getCurrentUser().getDisplayName());
-            FetchMemes.getMemeData("0");
+            FetchMemes.getMemeData();
 
             createActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // not signed in
+            // Not signed in
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
