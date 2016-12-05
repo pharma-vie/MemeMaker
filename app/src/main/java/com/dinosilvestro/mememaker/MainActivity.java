@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             createActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MemeDisplayActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MemeGridActivity.class);
                     intent.putExtra(GET_MEMES, MemeParcel.getMemes());
                     startActivity(intent);
                 }

@@ -2,6 +2,7 @@ package com.dinosilvestro.mememaker;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterViewHolder> {
 
+    public static final String GET_MEME_URL = "GET_MEME_URL";
     private MemeParcel[] mMemes;
     private Context mContext;
 
@@ -40,6 +42,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterVie
     public class MemeAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView mMemeImageView;
+        private String mMemeUrl;
 
         public MemeAdapterViewHolder(View itemView) {
             super(itemView);
@@ -48,12 +51,15 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterVie
         }
 
         public void bindMeme(MemeParcel memes) {
-            Picasso.with(mContext).load(memes.getMemeImageUrl()).into(mMemeImageView);
+            mMemeUrl = memes.getMemeImageUrl();
+            Picasso.with(mContext).load(mMemeUrl).into(mMemeImageView);
         }
 
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(mContext, MemeEditActivity.class);
+            intent.putExtra(GET_MEME_URL, mMemeUrl);
+            mContext.startActivity(intent);
         }
     }
 }

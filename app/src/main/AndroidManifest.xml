@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MemeDisplayActivity">
+        <activity android:name=".MemeGridActivity">
+        </activity>
+        <activity android:name=".MemeEditActivity">
         </activity>
     </application>
 

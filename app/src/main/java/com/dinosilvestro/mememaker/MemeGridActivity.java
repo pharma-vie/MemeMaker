@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.Arrays;
 
-public class MemeDisplayActivity extends AppCompatActivity {
+public class MemeGridActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
