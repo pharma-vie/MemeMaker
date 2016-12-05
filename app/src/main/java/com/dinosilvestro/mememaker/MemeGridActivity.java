@@ -11,11 +11,9 @@ import android.view.View;
 
 import java.util.Arrays;
 
-import static com.dinosilvestro.mememaker.MemeAdapter.GET_MEME_URL;
+import static com.dinosilvestro.mememaker.Keys.GET_MEME;
 
 public class MemeGridActivity extends AppCompatActivity {
-
-    private static final int REQUEST_IMAGE_GET = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +24,7 @@ public class MemeGridActivity extends AppCompatActivity {
         FloatingActionButton uploadActionButton = (FloatingActionButton) findViewById(R.id.upload_meme_action_button);
 
         Intent intent = getIntent();
-        Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.GET_MEMES);
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(Keys.GET_MEMES);
         MemeParcel[] memeParcel = Arrays.copyOf(parcelables, parcelables.length, MemeParcel[].class);
 
         MemeAdapter adapter = new MemeAdapter(this, memeParcel);
@@ -49,16 +47,16 @@ public class MemeGridActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_IMAGE_GET);
+            startActivityForResult(intent, Keys.REQUEST_IMAGE_GET);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+        if (requestCode == Keys.REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             String fullPhotoString = data.getDataString();
             Intent intent = new Intent(this, MemeEditActivity.class);
-            intent.putExtra(GET_MEME_URL, fullPhotoString);
+            intent.putExtra(GET_MEME, fullPhotoString);
             startActivity(intent);
         }
     }

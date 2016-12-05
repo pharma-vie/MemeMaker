@@ -16,8 +16,6 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String GET_MEMES = "GET_MEMES";
-    private static final int RC_SIGN_IN = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), MemeGridActivity.class);
-                    intent.putExtra(GET_MEMES, MemeParcel.getMemes());
+                    intent.putExtra(Keys.GET_MEMES, MemeParcel.getMemes());
                     startActivity(intent);
                 }
             });
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                             .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                             .build(),
-                    RC_SIGN_IN);
+                    Keys.REQUEST_SIGN_IN);
         }
     }
 

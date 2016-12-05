@@ -13,7 +13,6 @@ import com.squareup.picasso.Picasso;
 
 public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterViewHolder> {
 
-    public static final String GET_MEME_URL = "GET_MEME_URL";
     private MemeParcel[] mMemes;
     private Context mContext;
 
@@ -58,7 +57,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterVie
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(mContext, MemeEditActivity.class);
-            intent.putExtra(GET_MEME_URL, mMemeUrl);
+            intent.putExtra(Keys.GET_MEME, mMemeUrl);
             mContext.startActivity(intent);
         }
     }

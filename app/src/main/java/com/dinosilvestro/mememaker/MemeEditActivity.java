@@ -21,7 +21,7 @@ public class MemeEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            Picasso.with(this).load(intent.getStringExtra(MemeAdapter.GET_MEME_URL)).into(mMemeEditImage);
+            Picasso.with(this).load(intent.getStringExtra(Keys.GET_MEME)).into(mMemeEditImage);
         }
     }
 }
