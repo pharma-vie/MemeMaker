@@ -5,4 +5,5 @@
     <string name="no_memes_yet_text">You haven\'t created any memes yet!</string>
     <string name="this_is_a_meme_content_description">This is a meme</string>
     <string name="meme_edit_image_content_description">The editable meme</string>
+    <string name="image_upload_error_toast">Image cannot be uploaded. Please try another image, or try again later.</string>
 </resources>
