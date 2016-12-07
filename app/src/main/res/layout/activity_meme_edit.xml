@@ -31,6 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
         android:hint="@string/top_text_hint"/>
 
     <EditText
@@ -38,6 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_edit_text"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
         android:hint="@string/bottom_text_hint"/>
 
     <TextView
