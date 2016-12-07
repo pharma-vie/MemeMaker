@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/meme_edit_image_content_description"
-        />
+        tools:src="@drawable/com_facebook_button_like_background"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -24,5 +24,44 @@
         android:layout_centerVertical="true"
         android:indeterminateTint="@color/colorAccent"
         tools:targetApi="lollipop"/>
+
+    <EditText
+        android:id="@+id/top_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@+id/meme_edit_image_view"
+        android:hint="@string/top_text_hint"/>
+
+    <EditText
+        android:id="@+id/bottom_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/top_edit_text"
+        android:hint="@string/bottom_text_hint"/>
+
+    <TextView
+        android:id="@+id/top_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/meme_edit_image_view"
+        android:shadowColor="@color/colorPrimaryText"
+        android:shadowRadius="20"
+        android:textColor="@color/colorIcon"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/bottom_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/top_edit_text"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:shadowColor="@color/colorPrimaryText"
+        android:shadowRadius="20"
+        android:textColor="@color/colorIcon"
+        android:textSize="30sp"/>
 
 </RelativeLayout>

@@ -6,4 +6,10 @@
     <string name="this_is_a_meme_content_description">This is a meme</string>
     <string name="meme_edit_image_content_description">The editable meme</string>
     <string name="image_upload_error_toast">Image cannot be uploaded. Please try another image, or try again later.</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="dialog_title_text">Edit meme</string>
+    <string name="dialog_positive_text">OK</string>
+    <string name="dialog_negative_text">CANCEL</string>
+    <string name="top_text_hint">Top text</string>
+    <string name="bottom_text_hint">Bottom text</string>
 </resources>
