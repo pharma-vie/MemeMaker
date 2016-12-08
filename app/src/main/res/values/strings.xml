@@ -12,4 +12,6 @@
     <string name="dialog_negative_text">CANCEL</string>
     <string name="top_text_hint">Top text</string>
     <string name="bottom_text_hint">Bottom text</string>
+    <string name="save_meme_success_toast">Meme has been saved</string>
+    <string name="save_meme_failure_toast">Something went wrong. Unable to save meme. Please try again later.</string>
 </resources>

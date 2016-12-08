@@ -1,54 +1,64 @@
 package com.dinosilvestro.mememaker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.util.UUID;
+
 public class MemeEditActivity extends AppCompatActivity {
 
-    ImageView mMemeEditImage;
-    ProgressBar mProgressBar;
-    TextView mTopTextView;
-    TextView mBottomTextView;
-    EditText mTopEditText;
-    EditText mBottomEditText;
+    private ProgressBar mProgressBar;
+    private RelativeLayout mMemeContainer;
+    private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_edit);
 
-        mMemeEditImage = (ImageView) findViewById(R.id.meme_edit_image_view);
+        ImageView memeEditImage = (ImageView) findViewById(R.id.meme_edit_image_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        FloatingActionButton saveMemeActionButton = (FloatingActionButton) findViewById(R.id.save_meme_action_button);
+        mMemeContainer = (RelativeLayout) findViewById(R.id.meme_container);
 
         // TextViews that will be used for the top and bottom sections the meme
         // Invisible until user enters text into the matching EditTextView
-        mTopTextView = (TextView) findViewById(R.id.top_text_view);
-        mTopTextView.setText("");
-        mTopTextView.setVisibility(View.INVISIBLE);
-        mBottomTextView = (TextView) findViewById(R.id.bottom_text_view);
-        mBottomTextView.setText("");
-        mBottomTextView.setVisibility(View.INVISIBLE);
+        TextView topTextView = (TextView) findViewById(R.id.top_text_view);
+        topTextView.setText("");
+        topTextView.setVisibility(View.INVISIBLE);
+        TextView bottomTextView = (TextView) findViewById(R.id.bottom_text_view);
+        bottomTextView.setText("");
+        bottomTextView.setVisibility(View.INVISIBLE);
 
-        mTopEditText = (EditText) findViewById(R.id.top_edit_text);
-        mTopEditText.addTextChangedListener(new InputTextWatcher(mTopTextView));
+        EditText topEditText = (EditText) findViewById(R.id.top_edit_text);
+        topEditText.addTextChangedListener(new InputTextWatcher(topTextView));
 
-        mBottomEditText = (EditText) findViewById(R.id.bottom_edit_text);
-        mBottomEditText.addTextChangedListener(new InputTextWatcher(mBottomTextView));
+        EditText bottomEditText = (EditText) findViewById(R.id.bottom_edit_text);
+        bottomEditText.addTextChangedListener(new InputTextWatcher(bottomTextView));
 
         Intent intent = getIntent();
 
         if (intent != null) {
-            Picasso.with(this).load(intent.getStringExtra(Keys.GET_MEME)).into(mMemeEditImage, new Callback() {
+            Picasso.with(this).load(intent.getStringExtra(Keys.GET_MEME)).into(memeEditImage, new Callback() {
                 @Override
                 public void onSuccess() {
                     mProgressBar.setVisibility(View.GONE);
@@ -60,5 +70,34 @@ public class MemeEditActivity extends AppCompatActivity {
                 }
             });
         }
+
+        saveMemeActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMemeContainer.setDrawingCacheEnabled(true);
+                mMemeContainer.buildDrawingCache();
+                Bitmap bitmap = mMemeContainer.getDrawingCache();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                mMemeContainer.setDrawingCacheEnabled(false);
+                byte[] data = byteArrayOutputStream.toByteArray();
+
+                // Saving the meme into a directory based on the user's email
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    String path = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/" + UUID.randomUUID() + ".png";
+                    StorageReference storageReference = mFirebaseStorage.getReference(path);
+
+                    UploadTask uploadTask = storageReference.putBytes(data);
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(MemeEditActivity.this, R.string.save_meme_success_toast, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(MemeEditActivity.this, R.string.save_meme_failure_toast, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
