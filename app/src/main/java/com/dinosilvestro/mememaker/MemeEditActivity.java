@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,6 +31,7 @@ public class MemeEditActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private RelativeLayout mMemeContainer;
     private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +77,26 @@ public class MemeEditActivity extends AppCompatActivity {
         saveMemeActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMemeContainer.setDrawingCacheEnabled(true);
-                mMemeContainer.buildDrawingCache();
-                Bitmap bitmap = mMemeContainer.getDrawingCache();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                mMemeContainer.setDrawingCacheEnabled(false);
-                byte[] data = byteArrayOutputStream.toByteArray();
+                byte[] data = compressMeme();
 
-                // Saving the meme into a directory based on the user's email
+                // Check to make sure user is still logged in, save edited meme to Firebase Storage
+                // and Firebase Realtime Database
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     String path = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/" + UUID.randomUUID() + ".png";
                     StorageReference storageReference = mFirebaseStorage.getReference(path);
+
 
                     UploadTask uploadTask = storageReference.putBytes(data);
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            // Create path in the realtime database if it doesn't exist
+                            // or add to it if it does
+                            mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child("memes").push()
+                                    .setValue(taskSnapshot.getDownloadUrl().toString());
+
                             Toast.makeText(MemeEditActivity.this, R.string.save_meme_success_toast, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -99,5 +105,16 @@ public class MemeEditActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Compress meme with user-generated text into a byte array
+    private byte[] compressMeme() {
+        mMemeContainer.setDrawingCacheEnabled(true);
+        mMemeContainer.buildDrawingCache();
+        Bitmap bitmap = mMemeContainer.getDrawingCache();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        mMemeContainer.setDrawingCacheEnabled(false);
+        return byteArrayOutputStream.toByteArray();
     }
 }
