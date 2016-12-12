@@ -2,6 +2,8 @@ package com.dinosilvestro.mememaker;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,11 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
         @Override
         public void onClick(View v) {
+            Uri webPage = Uri.parse(mMemeUrl);
+            Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
+            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                mContext.startActivity(intent);
+            }
         }
     }
 }
