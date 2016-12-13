@@ -1,7 +1,9 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.api;
 
 
 import android.util.Log;
+
+import com.dinosilvestro.mememaker.parcels.MemeParcel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +21,7 @@ public class FetchMemes {
 
     private static final String TAG = FetchMemes.class.getSimpleName();
 
-    static void getMemeData() {
+    public static void getMemeData() {
         String url = "https://api.imgflip.com/get_memes";
 
         OkHttpClient client = new OkHttpClient();

@@ -6,7 +6,7 @@
     android:id="@+id/activity_meme_display"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dinosilvestro.mememaker.MemeGridActivity">
+    tools:context="com.dinosilvestro.mememaker.ui.MemeGridActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/meme_grid_recycler_view"

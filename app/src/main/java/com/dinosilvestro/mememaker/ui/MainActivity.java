@@ -1,4 +1,4 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.ui;
 
 import android.content.Intent;
 import android.os.Build;
@@ -12,6 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dinosilvestro.mememaker.R;
+import com.dinosilvestro.mememaker.adapters.SavedMemeAdapter;
+import com.dinosilvestro.mememaker.api.FetchMemes;
+import com.dinosilvestro.mememaker.misc.Keys;
+import com.dinosilvestro.mememaker.parcels.MemeParcel;
+import com.dinosilvestro.mememaker.parcels.SavedMemeParcel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ui.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;

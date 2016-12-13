@@ -1,4 +1,4 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.dinosilvestro.mememaker.R;
+import com.dinosilvestro.mememaker.adapters.MemeAdapter;
+import com.dinosilvestro.mememaker.misc.Keys;
+import com.dinosilvestro.mememaker.parcels.MemeParcel;
+
 import java.util.Arrays;
 
-import static com.dinosilvestro.mememaker.Keys.GET_MEME;
+import static com.dinosilvestro.mememaker.misc.Keys.GET_MEME;
 
 public class MemeGridActivity extends AppCompatActivity {
 

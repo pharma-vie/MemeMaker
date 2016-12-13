@@ -1,4 +1,4 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.parcels;
 
 
 import android.os.Parcel;

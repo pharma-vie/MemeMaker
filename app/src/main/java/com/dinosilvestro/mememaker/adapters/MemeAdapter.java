@@ -1,25 +1,26 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.adapters;
 
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.dinosilvestro.mememaker.R;
+import com.dinosilvestro.mememaker.misc.Keys;
+import com.dinosilvestro.mememaker.parcels.MemeParcel;
+import com.dinosilvestro.mememaker.ui.MemeEditActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterViewHolder> {
 
-public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.MemeAdapterViewHolder> {
-
-    private List<SavedMemeParcel> mMemes;
+    private MemeParcel[] mMemes;
     private Context mContext;
 
-    public SavedMemeAdapter(Context context, List<SavedMemeParcel> memes) {
+    public MemeAdapter(Context context, MemeParcel[] memes) {
         mContext = context;
         mMemes = memes;
     }
@@ -33,12 +34,12 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
     @Override
     public void onBindViewHolder(MemeAdapterViewHolder holder, int position) {
-        holder.bindMeme(mMemes.get(position));
+        holder.bindMeme(mMemes[position]);
     }
 
     @Override
     public int getItemCount() {
-        return mMemes.size();
+        return mMemes.length;
     }
 
     public class MemeAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -52,18 +53,16 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
             itemView.setOnClickListener(this);
         }
 
-        public void bindMeme(SavedMemeParcel memes) {
+        public void bindMeme(MemeParcel memes) {
             mMemeUrl = memes.getMemeImageUrl();
             Picasso.with(mContext).load(mMemeUrl).into(mMemeImageView);
         }
 
         @Override
         public void onClick(View v) {
-            Uri webPage = Uri.parse(mMemeUrl);
-            Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
-            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                mContext.startActivity(intent);
-            }
+            Intent intent = new Intent(mContext, MemeEditActivity.class);
+            intent.putExtra(Keys.GET_MEME, mMemeUrl);
+            mContext.startActivity(intent);
         }
     }
 }

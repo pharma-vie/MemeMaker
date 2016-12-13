@@ -1,4 +1,4 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.misc;
 
 
 import android.text.Editable;

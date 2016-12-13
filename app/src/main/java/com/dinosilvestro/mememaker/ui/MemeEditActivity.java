@@ -1,4 +1,4 @@
-package com.dinosilvestro.mememaker;
+package com.dinosilvestro.mememaker.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dinosilvestro.mememaker.R;
+import com.dinosilvestro.mememaker.misc.InputTextWatcher;
+import com.dinosilvestro.mememaker.misc.Keys;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
