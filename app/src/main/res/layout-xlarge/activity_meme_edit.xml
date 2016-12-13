@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/meme_edit_image_view"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/meme_edit_image_content_description"
@@ -47,7 +47,7 @@
             android:shadowDy="0.0"
             android:shadowRadius="2.0"
             android:textColor="@color/colorIcon"
-            android:textSize="30sp"/>
+            android:textSize="50sp"/>
 
         <TextView
             android:id="@+id/bottom_text_view"
@@ -63,7 +63,7 @@
             android:shadowDy="0.0"
             android:shadowRadius="2.0"
             android:textColor="@color/colorIcon"
-            android:textSize="30sp"/>
+            android:textSize="50sp"/>
 
     </RelativeLayout>
 
