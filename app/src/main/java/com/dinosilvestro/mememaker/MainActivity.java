@@ -1,8 +1,10 @@
 package com.dinosilvestro.mememaker;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,13 +29,17 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    // Get reference to Firebase Realtime Database
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FloatingActionButton createActionButton = (FloatingActionButton) findViewById(R.id.create_meme_action_button);
-        CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
+        final CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
         final RecyclerView savedMemeRecyclerView = (RecyclerView) findViewById(R.id.saved_meme_grid_recycler_view);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -41,58 +47,14 @@ public class MainActivity extends AppCompatActivity {
             // Already signed in
 
             // Get reference to Firebase Realtime Database
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
             // If the user has already created memes and saved them to the database...
-            if (mDatabase.child("users")
+            if (database.child("users")
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid()) != null) {
 
-                // Hide CardView saying they haven't created any memes yet
-                defaultCardView.setVisibility(View.GONE);
-
-                DatabaseReference user = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                // Get the memes for this user...
-                user.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            SavedMemeParcel savedMemeParcel = new SavedMemeParcel();
-                            savedMemeParcel.setMemeImageUrl(String.valueOf(child.getValue()));
-                            mSavedMemeParcel.add(savedMemeParcel);
-                        }
-
-                        // Load them into an adapter and display them in a RecyclerView
-                        SavedMemeAdapter adapter = new SavedMemeAdapter(getApplicationContext(), mSavedMemeParcel);
-                        savedMemeRecyclerView.setAdapter(adapter);
-
-                        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                        savedMemeRecyclerView.setLayoutManager(layoutManager);
-
-                        savedMemeRecyclerView.setHasFixedSize(true);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                // Fill RecyclerView with memes from database
+                refreshSavedMemes(defaultCardView, savedMemeRecyclerView, database);
             }
 
             // Get memes from API
@@ -117,6 +79,66 @@ public class MainActivity extends AppCompatActivity {
                             .build(),
                     Keys.REQUEST_SIGN_IN);
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent, getTheme()));
+        }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshSavedMemes(defaultCardView, savedMemeRecyclerView, mDatabase);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void refreshSavedMemes(CardView defaultCardView, final RecyclerView savedMemeRecyclerView, DatabaseReference mDatabase) {
+        // Hide CardView saying they haven't created any memes yet
+        defaultCardView.setVisibility(View.GONE);
+
+        DatabaseReference user = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        // Get the memes for this user...
+        user.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    SavedMemeParcel savedMemeParcel = new SavedMemeParcel();
+                    savedMemeParcel.setMemeImageUrl(String.valueOf(child.getValue()));
+                    mSavedMemeParcel.add(savedMemeParcel);
+                }
+
+                // Load them into an adapter and display them in a RecyclerView
+                SavedMemeAdapter adapter = new SavedMemeAdapter(getApplicationContext(), mSavedMemeParcel);
+                savedMemeRecyclerView.setAdapter(adapter);
+
+                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                savedMemeRecyclerView.setLayoutManager(layoutManager);
+
+                savedMemeRecyclerView.setHasFixedSize(true);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
