@@ -26,14 +26,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     // Get reference to Firebase Realtime Database
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -46,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         final CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
         final RecyclerView savedMemeRecyclerView = (RecyclerView) findViewById(R.id.saved_meme_grid_recycler_view);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -74,6 +76,44 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+
+            // Create the AccountHeader
+            AccountHeader headerResult = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                headerResult = new AccountHeaderBuilder()
+                        .withActivity(this)
+                        .withHeaderBackground(R.color.primary_light)
+                        .addProfiles(
+                                new ProfileDrawerItem().withName(auth.getCurrentUser().getDisplayName())
+                                        .withEmail(auth.getCurrentUser().getEmail())
+                                        .withIcon("")
+                        )
+                        .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                            @Override
+                            public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+
+                                Toast.makeText(MainActivity.this, R.string.signing_out_toast_text, Toast.LENGTH_SHORT).show();
+                                FirebaseAuth.getInstance().signOut();
+                                finish();
+
+                                return true;
+                            }
+                        })
+                        .withTextColor(getResources().getColor(R.color.colorPrimaryText, getTheme()))
+                        .build();
+            }
+
+
+            new DrawerBuilder()
+                    .withActivity(this)
+                    .withTranslucentStatusBar(false)
+                    .withAccountHeader(headerResult)
+                    .addDrawerItems(
+                            //pass your items here
+                    )
+                    .build();
+
         } else {
             // Not signed in
             startActivityForResult(

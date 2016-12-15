@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -31,7 +29,6 @@ import java.util.UUID;
 
 public class MemeEditActivity extends AppCompatActivity {
 
-    private ProgressBar mProgressBar;
     private RelativeLayout mMemeContainer;
     private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -42,7 +39,6 @@ public class MemeEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meme_edit);
 
         ImageView memeEditImage = (ImageView) findViewById(R.id.meme_edit_image_view);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         FloatingActionButton saveMemeActionButton = (FloatingActionButton) findViewById(R.id.save_meme_action_button);
         mMemeContainer = (RelativeLayout) findViewById(R.id.meme_container);
 
@@ -64,17 +60,7 @@ public class MemeEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            Picasso.with(this).load(intent.getStringExtra(Keys.GET_MEME)).into(memeEditImage, new Callback() {
-                @Override
-                public void onSuccess() {
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onError() {
-                    Toast.makeText(MemeEditActivity.this, R.string.image_upload_error_toast, Toast.LENGTH_SHORT).show();
-                }
-            });
+            Picasso.with(this).load(intent.getStringExtra(Keys.GET_MEME)).into(memeEditImage);
         }
 
         saveMemeActionButton.setOnClickListener(new View.OnClickListener() {
