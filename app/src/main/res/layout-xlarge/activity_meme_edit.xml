@@ -59,8 +59,9 @@
             android:shadowDx="0.0"
             android:shadowDy="0.0"
             android:shadowRadius="2.0"
+            android:textAllCaps="true"
             android:textColor="@color/colorIcon"
-            android:textSize="50sp"/>
+            android:textSize="48sp"/>
 
         <TextView
             android:id="@+id/bottom_text_view"
@@ -75,8 +76,9 @@
             android:shadowDx="0.0"
             android:shadowDy="0.0"
             android:shadowRadius="2.0"
+            android:textAllCaps="true"
             android:textColor="@color/colorIcon"
-            android:textSize="50sp"/>
+            android:textSize="48sp"/>
 
     </RelativeLayout>
 

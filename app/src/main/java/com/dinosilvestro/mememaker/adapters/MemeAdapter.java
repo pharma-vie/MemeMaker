@@ -55,7 +55,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeAdapterVie
 
         public void bindMeme(MemeParcel memes) {
             mMemeUrl = memes.getMemeImageUrl();
-            Picasso.with(mContext).load(mMemeUrl).into(mMemeImageView);
+            Picasso.with(mContext).load(mMemeUrl).resize(300, 300).centerCrop().into(mMemeImageView);
         }
 
         @Override

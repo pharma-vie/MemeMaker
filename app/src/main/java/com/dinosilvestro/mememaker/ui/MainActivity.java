@@ -1,6 +1,7 @@
 package com.dinosilvestro.mememaker.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,8 +29,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
@@ -77,11 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
             // Create the AccountHeader
-            AccountHeader headerResult = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                headerResult = new AccountHeaderBuilder()
+            AccountHeader headerResult = new AccountHeaderBuilder()
                         .withActivity(this)
                         .withHeaderBackground(R.color.primary_light)
                         .addProfiles(
@@ -100,18 +103,50 @@ public class MainActivity extends AppCompatActivity {
                                 return true;
                             }
                         })
-                        .withTextColor(getResources().getColor(R.color.colorPrimaryText, getTheme()))
+                    .withTextColor(getResources().getColor(R.color.colorSecondaryText, getTheme()))
                         .build();
-            }
-
 
             new DrawerBuilder()
                     .withActivity(this)
                     .withTranslucentStatusBar(false)
                     .withAccountHeader(headerResult)
                     .addDrawerItems(
-                            //pass your items here
+                            new PrimaryDrawerItem().withName("Home")
+                                    .withIcon(R.drawable.ic_home_black_24dp),
+                            new DividerDrawerItem(),
+                            new SecondaryDrawerItem().withName("r/Memes")
+                                    .withIcon(R.drawable.ic_open_in_browser_black_24dp),
+                            new SecondaryDrawerItem().withName("Know Your Meme")
+                                    .withIcon(R.drawable.ic_open_in_browser_black_24dp),
+                            new DividerDrawerItem()
                     )
+                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                        @Override
+                        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                            // do something with the clicked item :D
+                            switch (position) {
+                                case 1:
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case 3:
+                                    Uri webPage2 = Uri.parse("https://m.reddit.com/r/memes/");
+                                    Intent webIntent2 = new Intent(Intent.ACTION_VIEW, webPage2);
+                                    if (webIntent2.resolveActivity(getPackageManager()) != null) {
+                                        startActivity(webIntent2);
+                                    }
+                                    break;
+                                case 4:
+                                    Uri webPage1 = Uri.parse("http://knowyourmeme.com");
+                                    Intent webIntent1 = new Intent(Intent.ACTION_VIEW, webPage1);
+                                    if (webIntent1.resolveActivity(getPackageManager()) != null) {
+                                        startActivity(webIntent1);
+                                    }
+                                    break;
+                            }
+                            return true;
+                        }
+                    })
                     .build();
 
         } else {
