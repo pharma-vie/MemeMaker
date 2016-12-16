@@ -32,6 +32,7 @@ public class MemeEditActivity extends AppCompatActivity {
     private RelativeLayout mMemeContainer;
     private FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class MemeEditActivity extends AppCompatActivity {
 
                 // Check to make sure user is still logged in, save edited meme to Firebase Storage
                 // and Firebase Realtime Database
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (mFirebaseAuth.getCurrentUser() != null) {
                     String path = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "/" + UUID.randomUUID() + ".png";
                     StorageReference storageReference = mFirebaseStorage.getReference(path);
 
@@ -94,6 +95,9 @@ public class MemeEditActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Create new navigation drawer
+        new NavigationDrawer(this, mFirebaseAuth);
     }
 
     // Compress meme with user-generated text into a byte array

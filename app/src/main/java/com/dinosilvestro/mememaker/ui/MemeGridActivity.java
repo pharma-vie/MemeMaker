@@ -13,12 +13,15 @@ import com.dinosilvestro.mememaker.R;
 import com.dinosilvestro.mememaker.adapters.MemeAdapter;
 import com.dinosilvestro.mememaker.misc.Keys;
 import com.dinosilvestro.mememaker.parcels.MemeParcel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
 import static com.dinosilvestro.mememaker.misc.Keys.GET_MEME;
 
 public class MemeGridActivity extends AppCompatActivity {
+
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,9 @@ public class MemeGridActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+
+        // Create new navigation drawer
+        new NavigationDrawer(this, mFirebaseAuth);
     }
 
     public void selectImage() {
