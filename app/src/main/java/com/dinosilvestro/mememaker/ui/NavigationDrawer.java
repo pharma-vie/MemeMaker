@@ -3,9 +3,11 @@ package com.dinosilvestro.mememaker.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dinosilvestro.mememaker.R;
@@ -20,19 +22,37 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.squareup.picasso.Picasso;
 
 
 public class NavigationDrawer {
 
     public NavigationDrawer(final Activity activity, FirebaseAuth auth, Toolbar toolbar) {
+
+        // Initialize and create the image loader logic
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Picasso.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Picasso.with(imageView.getContext()).cancelRequest(imageView);
+            }
+        });
+
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .withHeaderBackground(R.color.primary_light)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(auth.getCurrentUser().getDisplayName())
+                        new ProfileDrawerItem()
+                                .withName(auth.getCurrentUser().getDisplayName())
                                 .withEmail(auth.getCurrentUser().getEmail())
-                                .withIcon("")
+                                .withIcon(auth.getCurrentUser().getPhotoUrl())
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
