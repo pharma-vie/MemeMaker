@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +43,8 @@ public class MemeEditActivity extends AppCompatActivity {
         ImageView memeEditImage = (ImageView) findViewById(R.id.meme_edit_image_view);
         FloatingActionButton saveMemeActionButton = (FloatingActionButton) findViewById(R.id.save_meme_action_button);
         mMemeContainer = (RelativeLayout) findViewById(R.id.meme_container);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // TextViews that will be used for the top and bottom sections the meme
         // Invisible until user enters text into the matching EditTextView
@@ -97,7 +100,7 @@ public class MemeEditActivity extends AppCompatActivity {
         });
 
         // Create new navigation drawer
-        new NavigationDrawer(this, mFirebaseAuth);
+        new NavigationDrawer(this, mFirebaseAuth, toolbar);
     }
 
     // Compress meme with user-generated text into a byte array

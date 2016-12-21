@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         final CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
         final RecyclerView savedMemeRecyclerView = (RecyclerView) findViewById(R.id.saved_meme_grid_recycler_view);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             // Create new navigation drawer
-            new NavigationDrawer(this, auth);
+            new NavigationDrawer(this, auth, toolbar);
 
         } else {
             // Not signed in

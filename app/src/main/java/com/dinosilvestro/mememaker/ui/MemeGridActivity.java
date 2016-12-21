@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.dinosilvestro.mememaker.R;
@@ -30,6 +31,8 @@ public class MemeGridActivity extends AppCompatActivity {
 
         RecyclerView memeRecyclerView = (RecyclerView) findViewById(R.id.meme_grid_recycler_view);
         FloatingActionButton uploadActionButton = (FloatingActionButton) findViewById(R.id.upload_meme_action_button);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         Parcelable[] parcelables = intent.getParcelableArrayExtra(Keys.GET_MEMES);
@@ -51,7 +54,7 @@ public class MemeGridActivity extends AppCompatActivity {
         });
 
         // Create new navigation drawer
-        new NavigationDrawer(this, mFirebaseAuth);
+        new NavigationDrawer(this, mFirebaseAuth, toolbar);
     }
 
     public void selectImage() {

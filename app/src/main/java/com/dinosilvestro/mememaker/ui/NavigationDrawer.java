@@ -4,6 +4,7 @@ package com.dinosilvestro.mememaker.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 public class NavigationDrawer {
 
-    public NavigationDrawer(final Activity activity, FirebaseAuth auth) {
+    public NavigationDrawer(final Activity activity, FirebaseAuth auth, Toolbar toolbar) {
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -50,7 +51,7 @@ public class NavigationDrawer {
 
         new DrawerBuilder()
                 .withActivity(activity)
-                .withTranslucentStatusBar(false)
+                .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home")
