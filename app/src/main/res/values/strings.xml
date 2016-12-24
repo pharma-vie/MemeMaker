@@ -15,4 +15,5 @@
     <string name="save_meme_success_toast">Meme has been saved</string>
     <string name="save_meme_failure_toast">Something went wrong. Unable to save meme. Please try again later.</string>
     <string name="signing_out_toast_text">Signing out...</string>
+    <string name="shortcut_label">Upload Image</string>
 </resources>

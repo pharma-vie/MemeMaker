@@ -22,13 +22,13 @@ import static com.dinosilvestro.mememaker.misc.Keys.GET_MEME;
 
 public class MemeGridActivity extends AppCompatActivity {
 
+    private static final String ACTION_UPLOAD_IMAGE_SHORTCUT = "com.dinosilvestro.mememaker.UPLOAD";
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_grid);
-
         RecyclerView memeRecyclerView = (RecyclerView) findViewById(R.id.meme_grid_recycler_view);
         FloatingActionButton uploadActionButton = (FloatingActionButton) findViewById(R.id.upload_meme_action_button);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -36,28 +36,38 @@ public class MemeGridActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Parcelable[] parcelables = intent.getParcelableArrayExtra(Keys.GET_MEMES);
-        MemeParcel[] memeParcel = Arrays.copyOf(parcelables, parcelables.length, MemeParcel[].class);
 
-        MemeAdapter adapter = new MemeAdapter(this, memeParcel);
-        memeRecyclerView.setAdapter(adapter);
+        // This null check is to prevent crashing if the user is starting this activity
+        // from the app shortcut
+        if (parcelables != null) {
+            MemeParcel[] memeParcel = Arrays.copyOf(parcelables, parcelables.length, MemeParcel[].class);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        memeRecyclerView.setLayoutManager(layoutManager);
+            MemeAdapter adapter = new MemeAdapter(this, memeParcel);
+            memeRecyclerView.setAdapter(adapter);
 
-        memeRecyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+            memeRecyclerView.setLayoutManager(layoutManager);
 
-        uploadActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
-            }
-        });
+            memeRecyclerView.setHasFixedSize(true);
+
+            uploadActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectImageToUpload();
+                }
+            });
+        }
+
+        // User has started this activity from the app shortcut
+        if (ACTION_UPLOAD_IMAGE_SHORTCUT.equals(getIntent().getAction())) {
+            selectImageToUpload();
+        }
 
         // Create new navigation drawer
         new NavigationDrawer(this, mFirebaseAuth, toolbar);
     }
 
-    public void selectImage() {
+    public void selectImageToUpload() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         if (intent.resolveActivity(getPackageManager()) != null) {

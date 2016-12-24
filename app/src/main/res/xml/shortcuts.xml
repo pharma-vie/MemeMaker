@@ -1,0 +1,16 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_file_upload_black_24dp"
+        android:shortcutId="upload"
+        android:shortcutShortLabel="@string/shortcut_label"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="com.dinosilvestro.mememaker.UPLOAD"
+            android:targetClass="com.dinosilvestro.mememaker.ui.MemeGridActivity"
+            android:targetPackage="com.dinosilvestro.mememaker"/>
+    </shortcut>
+
+</shortcuts>
