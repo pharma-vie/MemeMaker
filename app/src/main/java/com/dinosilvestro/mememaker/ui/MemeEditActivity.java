@@ -28,6 +28,8 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
+import static com.dinosilvestro.mememaker.anims.Animations.fabButtonAnimate;
+
 public class MemeEditActivity extends AppCompatActivity {
 
     private RelativeLayout mMemeContainer;
@@ -41,7 +43,7 @@ public class MemeEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meme_edit);
 
         ImageView memeEditImage = (ImageView) findViewById(R.id.meme_edit_image_view);
-        FloatingActionButton saveMemeActionButton = (FloatingActionButton) findViewById(R.id.save_meme_action_button);
+        final FloatingActionButton saveMemeActionButton = (FloatingActionButton) findViewById(R.id.save_meme_action_button);
         mMemeContainer = (RelativeLayout) findViewById(R.id.meme_container);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,6 +72,9 @@ public class MemeEditActivity extends AppCompatActivity {
         saveMemeActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                fabButtonAnimate(saveMemeActionButton);
+
                 byte[] data = compressMeme();
 
                 // Check to make sure user is still logged in, save edited meme to Firebase Storage

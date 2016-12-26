@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.dinosilvestro.mememaker.anims.Animations.fabButtonAnimate;
+
 public class MainActivity extends AppCompatActivity {
 
     // Get reference to Firebase Realtime Database
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FloatingActionButton createActionButton = (FloatingActionButton) findViewById(R.id.create_meme_action_button);
+        final FloatingActionButton createActionButton = (FloatingActionButton) findViewById(R.id.create_meme_action_button);
         final CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
         final RecyclerView savedMemeRecyclerView = (RecyclerView) findViewById(R.id.saved_meme_grid_recycler_view);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             createActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    fabButtonAnimate(createActionButton);
                     Intent intent = new Intent(getApplicationContext(), MemeGridActivity.class);
                     intent.putExtra(Keys.GET_MEMES, MemeParcel.getMemes());
                     startActivity(intent);

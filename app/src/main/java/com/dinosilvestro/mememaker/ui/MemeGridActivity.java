@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
+import static com.dinosilvestro.mememaker.anims.Animations.fabButtonAnimate;
 import static com.dinosilvestro.mememaker.misc.Keys.GET_MEME;
 
 public class MemeGridActivity extends AppCompatActivity {
@@ -30,7 +31,7 @@ public class MemeGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_grid);
         RecyclerView memeRecyclerView = (RecyclerView) findViewById(R.id.meme_grid_recycler_view);
-        FloatingActionButton uploadActionButton = (FloatingActionButton) findViewById(R.id.upload_meme_action_button);
+        final FloatingActionButton uploadActionButton = (FloatingActionButton) findViewById(R.id.upload_meme_action_button);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -53,6 +54,7 @@ public class MemeGridActivity extends AppCompatActivity {
             uploadActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    fabButtonAnimate(uploadActionButton);
                     selectImageToUpload();
                 }
             });
