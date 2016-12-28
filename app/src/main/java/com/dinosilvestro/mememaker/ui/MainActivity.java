@@ -38,15 +38,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Get reference to Firebase Realtime Database
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    CardView mDefaultCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final FloatingActionButton createActionButton = (FloatingActionButton) findViewById(R.id.create_meme_action_button);
-        final CardView defaultCardView = (CardView) findViewById(R.id.default_card_view);
         final RecyclerView savedMemeRecyclerView = (RecyclerView) findViewById(R.id.saved_meme_grid_recycler_view);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mDefaultCardView = (CardView) findViewById(R.id.default_card_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid()) != null) {
 
                 // Fill RecyclerView with memes from database
-                refreshSavedMemes(defaultCardView, savedMemeRecyclerView, database);
+                refreshSavedMemes(savedMemeRecyclerView, database);
             }
 
             // Get memes from API
@@ -81,33 +82,35 @@ public class MainActivity extends AppCompatActivity {
             // Create new navigation drawer
             new NavigationDrawer(this, auth, toolbar);
 
+
+            // Use app's accent color for the swipe refresh layout if
+            // the user is using a Marshmallow or later device
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent, getTheme()));
+            }
+
+            // Refresh the RecyclerView
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refreshSavedMemes(savedMemeRecyclerView, mDatabase);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
         } else {
             // Not signed in
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
-                            .setTheme(R.style.AppTheme)
+                            .setTheme(R.style.SplashScreenTheme)
                             .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                             .build(),
                     Keys.REQUEST_SIGN_IN);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent, getTheme()));
-        }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshSavedMemes(defaultCardView, savedMemeRecyclerView, mDatabase);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
-    private void refreshSavedMemes(CardView defaultCardView, final RecyclerView savedMemeRecyclerView, DatabaseReference mDatabase) {
-        // Hide CardView saying they haven't created any memes yet
-        defaultCardView.setVisibility(View.GONE);
+    private void refreshSavedMemes(final RecyclerView savedMemeRecyclerView, DatabaseReference mDatabase) {
 
         DatabaseReference user = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -115,21 +118,27 @@ public class MainActivity extends AppCompatActivity {
         user.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    SavedMemeParcel savedMemeParcel = new SavedMemeParcel();
-                    savedMemeParcel.setMemeImageUrl(String.valueOf(child.getValue()));
-                    mSavedMemeParcel.add(savedMemeParcel);
+                if (dataSnapshot != null) {
+
+                    // Hide CardView saying they haven't created any memes yet
+                    mDefaultCardView.setVisibility(View.GONE);
+
+                    List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        SavedMemeParcel savedMemeParcel = new SavedMemeParcel();
+                        savedMemeParcel.setMemeImageUrl(String.valueOf(child.getValue()));
+                        mSavedMemeParcel.add(savedMemeParcel);
+                    }
+
+                    // Load them into an adapter and display them in a RecyclerView
+                    SavedMemeAdapter adapter = new SavedMemeAdapter(getApplicationContext(), mSavedMemeParcel);
+                    savedMemeRecyclerView.setAdapter(adapter);
+
+                    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                    savedMemeRecyclerView.setLayoutManager(layoutManager);
+
+                    savedMemeRecyclerView.setHasFixedSize(true);
                 }
-
-                // Load them into an adapter and display them in a RecyclerView
-                SavedMemeAdapter adapter = new SavedMemeAdapter(getApplicationContext(), mSavedMemeParcel);
-                savedMemeRecyclerView.setAdapter(adapter);
-
-                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                savedMemeRecyclerView.setLayoutManager(layoutManager);
-
-                savedMemeRecyclerView.setHasFixedSize(true);
             }
 
             @Override
