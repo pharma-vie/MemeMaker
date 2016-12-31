@@ -4,8 +4,6 @@ package com.dinosilvestro.mememaker.parcels;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 public class SavedMemeParcel implements Parcelable {
 
     public static final Creator<SavedMemeParcel> CREATOR = new Creator<SavedMemeParcel>() {
@@ -20,7 +18,6 @@ public class SavedMemeParcel implements Parcelable {
         }
     };
 
-    private static List<SavedMemeParcel> mMemes;
     private String mMemeImageUrl;
 
     private SavedMemeParcel(Parcel in) {
@@ -29,14 +26,6 @@ public class SavedMemeParcel implements Parcelable {
 
     // Default empty constructor
     public SavedMemeParcel() {
-    }
-
-    public static List<SavedMemeParcel> getMemes() {
-        return mMemes;
-    }
-
-    public void setMemes(List<SavedMemeParcel> mMemes) {
-        SavedMemeParcel.mMemes = mMemes;
     }
 
     public String getMemeImageUrl() {

@@ -21,6 +21,7 @@ public class FetchMemes {
 
     private static final String TAG = FetchMemes.class.getSimpleName();
 
+    // Leverage the OkHttp library to asynchronously access the meme template API
     public static void getMemeData() {
         String url = "https://api.imgflip.com/get_memes";
 
@@ -49,6 +50,7 @@ public class FetchMemes {
         });
     }
 
+    // Go through the API and collect and store the meme template URLs in a parcel array
     private static MemeParcel[] getMemes(String jsonData) throws JSONException {
         JSONObject jsonResults = new JSONObject(jsonData);
         JSONObject data = jsonResults.getJSONObject("data");
