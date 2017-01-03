@@ -1,4 +1,4 @@
-# MemeMaker
+# Meme Maker
 
 <a href='https://play.google.com/store/apps/details?id=com.dinosilvestro.mememaker&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
@@ -10,3 +10,21 @@
 ##Installation
 
 Simply download or fork this repository and import into Android Studio. You'll also need to create a new project with Firebase and add the provided google-services.json to the app directory.
+
+API provided by: https://imgflip.com
+
+##Screenshots 
+
+![Phone Sign-In](http://i.imgur.com/mcU6IE6.png)
+
+![Phone Main Layout](http://i.imgur.com/2Wq3nWG.png)
+
+![Phone API Template Layout](http://i.imgur.com/7Pdiu5n.png)
+
+![Phone Upload Image From App](http://i.imgur.com/Bvwzbk8.png)
+
+![Phone Customize Meme](http://i.imgur.com/kiq01hn.png)
+
+![Phone Main Layout After Created Memes](http://i.imgur.com/eVvqGbB.png)
+
+![Phone Upload App Shortcut](http://i.imgur.com/rGSSPwf.png)
