@@ -1,5 +1,7 @@
 # MemeMaker
 
+<a href='https://play.google.com/store/apps/details?id=com.dinosilvestro.mememaker&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
 - Published an app to the Play Store that leverages a REST API to discover popular memes.
 - Allows the user to customize the meme template with text, or upload their own image to customize.
 - Deeply integrates with core Firebase features such as: Authentication, Storage, Realtime Database, and Analytics.
