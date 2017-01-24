@@ -123,14 +123,26 @@ public class MainActivity extends AppCompatActivity {
                     // Hide CardView saying they haven't created any memes yet
                     mDefaultCardView.setVisibility(View.GONE);
 
-                    List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
+                    // Create an array with a size equal to the amount of children in the dataSnapshot
+                    String[] dataSnapshotData = new String[(int) dataSnapshot.getChildrenCount()];
+
+                    // Iterate through the dataSnapshot and place the data into the array
+                    int index = 0;
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        dataSnapshotData[index] = String.valueOf(child.getValue());
+                        index++;
+                    }
+
+                    // Loop backwards through the array containing the data from the dataSnapshot
+                    // so most recently created memes appear first in the RecyclerView later
+                    List<SavedMemeParcel> mSavedMemeParcel = new ArrayList<>();
+                    for (int i = dataSnapshotData.length - 1; i >= 0; i--) {
                         SavedMemeParcel savedMemeParcel = new SavedMemeParcel();
-                        savedMemeParcel.setMemeImageUrl(String.valueOf(child.getValue()));
+                        savedMemeParcel.setMemeImageUrl(dataSnapshotData[i]);
                         mSavedMemeParcel.add(savedMemeParcel);
                     }
 
-                    // Load them into an adapter and display them in a RecyclerView
+                    // Load saved memes into an adapter and display them in a RecyclerView
                     SavedMemeAdapter adapter = new SavedMemeAdapter(getApplicationContext(), mSavedMemeParcel);
                     savedMemeRecyclerView.setAdapter(adapter);
 
