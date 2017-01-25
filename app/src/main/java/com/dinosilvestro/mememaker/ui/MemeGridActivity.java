@@ -61,8 +61,16 @@ public class MemeGridActivity extends AppCompatActivity {
         }
 
         // User has started this activity from the app shortcut
-        if (ACTION_UPLOAD_IMAGE_SHORTCUT.equals(getIntent().getAction())) {
+        else if (ACTION_UPLOAD_IMAGE_SHORTCUT.equals(getIntent().getAction())) {
             selectImageToUpload();
+        }
+
+        // User has started this activity with the intent filter
+        else if (intent.getType().contains("image/")) {
+            String fullPhotoString = intent.getParcelableExtra(Intent.EXTRA_STREAM).toString();
+            Intent intentFilterIntent = new Intent(this, MemeEditActivity.class);
+            intentFilterIntent.putExtra(GET_MEME, fullPhotoString);
+            startActivity(intentFilterIntent);
         }
 
         // Create new navigation drawer
