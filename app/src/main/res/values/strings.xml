@@ -16,4 +16,5 @@
     <string name="save_meme_failure_toast">Something went wrong. Unable to save meme. Please try again later.</string>
     <string name="signing_out_toast_text">Signing out…</string>
     <string name="shortcut_label">Upload Image</string>
+    <string name="open_in_browser_menu_text">Open in browser</string>
 </resources>

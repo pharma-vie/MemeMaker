@@ -2,6 +2,8 @@ package com.dinosilvestro.mememaker.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -62,15 +64,10 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
         @Override
         public void onClick(View v) {
-            /*Uri webPage = Uri.parse(mMemeUrl);
-            Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
-            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                mContext.startActivity(intent);
-            }*/
-
             v.startActionMode(new ActionMode.Callback() {
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.context_menu, menu);
                     return true;
                 }
 
@@ -81,7 +78,16 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    return false;
+                    switch (item.getItemId()) {
+                        case R.id.menu_open_in_browser:
+                            Uri webPage = Uri.parse(mMemeUrl);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                                mContext.startActivity(intent);
+                            }
+                            break;
+                    }
+                    return true;
                 }
 
                 @Override
