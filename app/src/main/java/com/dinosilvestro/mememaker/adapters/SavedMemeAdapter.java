@@ -84,6 +84,7 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
+
                         //Open selected meme in the browser
                         case R.id.menu_open_in_browser:
                             Uri webPage = Uri.parse(mMemeUrl);
@@ -92,26 +93,10 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
                                 mContext.startActivity(intent);
                             }
                             break;
+
                         // Use Picasso to download the selected meme into the phone's gallery
                         case R.id.menu_download:
-                            Picasso.with(mContext).load(mMemeUrl).into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    Toast.makeText(mContext, "Saving meme...", Toast.LENGTH_SHORT).show();
-                                    MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
-                                            bitmap, mMemeUrl, "This is a meme");
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    Toast.makeText(mContext, "Unable to download meme. Try again later.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                                }
-                            });
+                            downloadMeme();
                             break;
                     }
                     return true;
@@ -119,6 +104,27 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
+
+                }
+            });
+        }
+
+        private void downloadMeme() {
+            Picasso.with(mContext).load(mMemeUrl).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Toast.makeText(mContext, "Saving meme...", Toast.LENGTH_SHORT).show();
+                    MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                            bitmap, mMemeUrl, "This is a meme");
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    Toast.makeText(mContext, "Unable to download meme. Try again later.", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
 
                 }
             });

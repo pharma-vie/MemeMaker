@@ -1,9 +1,14 @@
 package com.dinosilvestro.mememaker.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -61,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                 // Fill RecyclerView with memes from database
                 refreshSavedMemes(savedMemeRecyclerView, database);
+
+                // Check to see if the write to external storage permission has been granted
+                // so that the user is able to download saved memes to their device
+                storagePermissionCheck();
             }
 
             // Get memes from API
@@ -100,6 +109,37 @@ public class MainActivity extends AppCompatActivity {
                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                             .build(),
                     Keys.REQUEST_SIGN_IN);
+        }
+    }
+
+    private void storagePermissionCheck() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Keys.PERMISSION_WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Keys.PERMISSION_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // TODO: Permission was granted. Enable download functionality.
+
+                } else {
+
+                    // TODO: Permission denied. Disable download functionality.
+                }
+            }
         }
     }
 
@@ -193,4 +233,6 @@ public class MainActivity extends AppCompatActivity {
         // User is not signed in. Maybe just wait for the user to press
         // "sign in" again, or show a message.
     }
+
+
 }
