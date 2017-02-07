@@ -3,7 +3,10 @@ package com.dinosilvestro.mememaker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -12,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.dinosilvestro.mememaker.R;
 import com.dinosilvestro.mememaker.parcels.SavedMemeParcel;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -79,12 +84,34 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
+                        //Open selected meme in the browser
                         case R.id.menu_open_in_browser:
                             Uri webPage = Uri.parse(mMemeUrl);
                             Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
                             if (intent.resolveActivity(mContext.getPackageManager()) != null) {
                                 mContext.startActivity(intent);
                             }
+                            break;
+                        // Use Picasso to download the selected meme into the phone's gallery
+                        case R.id.menu_download:
+                            Picasso.with(mContext).load(mMemeUrl).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    Toast.makeText(mContext, "Saving meme...", Toast.LENGTH_SHORT).show();
+                                    MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                                            bitmap, mMemeUrl, "This is a meme");
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    Toast.makeText(mContext, "Unable to download meme. Try again later.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
                             break;
                     }
                     return true;

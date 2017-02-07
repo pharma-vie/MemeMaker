@@ -17,4 +17,5 @@
     <string name="signing_out_toast_text">Signing out…</string>
     <string name="shortcut_label">Upload Image</string>
     <string name="open_in_browser_menu_text">Open in browser</string>
+    <string name="download_menu_text">Download</string>
 </resources>
