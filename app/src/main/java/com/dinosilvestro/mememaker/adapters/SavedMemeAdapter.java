@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dinosilvestro.mememaker.R;
+import com.dinosilvestro.mememaker.misc.Keys;
 import com.dinosilvestro.mememaker.parcels.SavedMemeParcel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -96,7 +97,12 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
                         // Use Picasso to download the selected meme into the phone's gallery
                         case R.id.menu_download:
-                            downloadMeme();
+                            handleMeme(Keys.REQUEST_DOWNLOAD_MEME);
+                            break;
+
+                        // Use an implicit intent to share the selected meme
+                        case R.id.menu_share:
+                            handleMeme(Keys.REQUEST_SHARE_MEME);
                             break;
                     }
                     return true;
@@ -109,18 +115,33 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
             });
         }
 
-        private void downloadMeme() {
+        private void handleMeme(final int requestCode) {
             Picasso.with(mContext).load(mMemeUrl).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Toast.makeText(mContext, "Saving meme...", Toast.LENGTH_SHORT).show();
-                    MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
-                            bitmap, mMemeUrl, "This is a meme");
+
+                    // Based on the request code param, either download the selected meme...
+                    if (requestCode == Keys.REQUEST_DOWNLOAD_MEME) {
+                        Toast.makeText(mContext, R.string.saving_meme_toast_text, Toast.LENGTH_SHORT).show();
+                        MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                                bitmap, mMemeUrl, mContext.getString(R.string.downloaded_meme_description_text));
+
+                        // ...or share it.
+                    } else if (requestCode == Keys.REQUEST_SHARE_MEME) {
+                        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                                bitmap, mMemeUrl, mContext.getString(R.string.downloaded_meme_description_text)));
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                        shareIntent.setType("image/*");
+                        mContext.startActivity(Intent.createChooser(shareIntent,
+                                mContext.getString(R.string.share_intent_send_text)));
+                    }
                 }
 
                 @Override
                 public void onBitmapFailed(Drawable errorDrawable) {
-                    Toast.makeText(mContext, "Unable to download meme. Try again later.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.unable_to_download_meme_toast_text, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

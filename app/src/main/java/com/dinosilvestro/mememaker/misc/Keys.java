@@ -7,4 +7,6 @@ public class Keys {
     public static final int REQUEST_SIGN_IN = 1;
     public static final int REQUEST_IMAGE_GET = 2;
     public static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 3;
+    public static final int REQUEST_DOWNLOAD_MEME = 4;
+    public static final int REQUEST_SHARE_MEME = 5;
 }

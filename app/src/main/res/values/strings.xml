@@ -18,4 +18,9 @@
     <string name="shortcut_label">Upload Image</string>
     <string name="open_in_browser_menu_text">Open in browser</string>
     <string name="download_menu_text">Download</string>
+    <string name="share_menu_text">Share</string>
+    <string name="share_intent_send_text">Send to:</string>
+    <string name="saving_meme_toast_text">Saving meme...</string>
+    <string name="unable_to_download_meme_toast_text">Unable to download meme. Try again later.</string>
+    <string name="downloaded_meme_description_text">This is a meme</string>
 </resources>
