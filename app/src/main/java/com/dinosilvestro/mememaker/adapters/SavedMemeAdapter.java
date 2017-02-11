@@ -88,7 +88,6 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
-
                         //Open selected meme in the browser
                         case R.id.menu_open_in_browser:
                             Uri webPage = Uri.parse(mMemeUrl);
@@ -100,12 +99,20 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
                         // Use Picasso to download the selected meme into the phone's gallery
                         case R.id.menu_download:
-                            handleMeme(Keys.REQUEST_DOWNLOAD_MEME);
+                            if (Keys.IS_PERMISSION_GRANTED_FLAG) {
+                                handleMeme(Keys.REQUEST_DOWNLOAD_MEME);
+                            } else {
+                                Toast.makeText(mContext, R.string.enable_storage_permission_toast_text, Toast.LENGTH_SHORT).show();
+                            }
                             break;
 
                         // Use an implicit intent to share the selected meme
                         case R.id.menu_share:
-                            handleMeme(Keys.REQUEST_SHARE_MEME);
+                            if (Keys.IS_PERMISSION_GRANTED_FLAG) {
+                                handleMeme(Keys.REQUEST_SHARE_MEME);
+                            } else {
+                                Toast.makeText(mContext, R.string.enable_storage_permission_toast_text, Toast.LENGTH_SHORT).show();
+                            }
                             break;
                     }
                     return true;

@@ -41,8 +41,8 @@ import static com.dinosilvestro.mememaker.anims.Animations.fabButtonAnimate;
 public class MainActivity extends AppCompatActivity {
 
     // Get reference to Firebase Realtime Database
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    CardView mDefaultCardView;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private CardView mDefaultCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     Keys.PERMISSION_WRITE_EXTERNAL_STORAGE);
+        } else {
+            // Permission has already been granted, set permission flag to true
+            Keys.IS_PERMISSION_GRANTED_FLAG = true;
         }
     }
 
@@ -129,16 +132,10 @@ public class MainActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case Keys.PERMISSION_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // TODO: Permission was granted. Enable download functionality.
-
-                } else {
-
-                    // TODO: Permission denied. Disable download functionality.
-                }
+                // Permission has been granted, set flag to true
+// Permission has been denied, set flag to false
+                Keys.IS_PERMISSION_GRANTED_FLAG = grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED;
             }
         }
     }

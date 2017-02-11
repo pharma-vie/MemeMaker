@@ -23,4 +23,5 @@
     <string name="saving_meme_toast_text">Saving meme...</string>
     <string name="unable_to_download_meme_toast_text">Unable to download meme. Try again later.</string>
     <string name="downloaded_meme_description_text">This is a meme</string>
+    <string name="enable_storage_permission_toast_text">Please enable the storage permission to continue.</string>
 </resources>
