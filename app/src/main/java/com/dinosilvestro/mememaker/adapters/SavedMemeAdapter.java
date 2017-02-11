@@ -69,7 +69,10 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
+            // Set the background color around the selected meme to that of the app's accent color
+            v.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+
             v.startActionMode(new ActionMode.Callback() {
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -110,7 +113,9 @@ public class SavedMemeAdapter extends RecyclerView.Adapter<SavedMemeAdapter.Meme
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
-
+                    // When the meme is deselected, or another meme is selected
+                    // revert the background color to the default color
+                    v.setBackgroundColor(mContext.getResources().getColor(R.color.colorDefaultBackground));
                 }
             });
         }
